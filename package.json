@@ -1,0 +1,15 @@
+{
+  "name": "radios.palminio.cl",
+  "version": "1.0.0",
+  "description": "Este proyecto implementa un proceso ETL (Extracción, Transformación y Carga) sobre un archivo Excel que contiene información de concesiones de radio. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lucas Palminio",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "xlsx": "^0.18.5"
+  }
+}

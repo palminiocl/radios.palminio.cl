@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base de datos de RADIOS FM/AM de Chile</title>
+</head>
+<body>
+    
+    <!-- Input field for the user to type their search query -->
+    <input type="text" id="searchInput" placeholder="Buscar...">
+    
+    <!-- Unordered list to display the search results -->
+    <ul id="results"></ul>
+
+    <script>
+        // Add an event listener to the search input field to detect user input
+        document.getElementById('searchInput').addEventListener('input', function() {
+            // Get the user's query, convert it to lowercase, trim whitespace, and split it into terms
+            const query = this.value.toLowerCase().trim().replace(/\s+/g, ' ').split(' ');
+
+            // Fetch the JSON file containing the radio data
+            fetch('listado_clean.json')
+                .then(response => response.json()) // Parse the JSON response
+                .then(data => {
+                    // Filter the data based on the user's query
+                    const results = data.filter(item => 
+                        query.every(term => 
+                            // Check if each term matches any of the radio's properties
+                            (item.Nombre_Radio && item.Nombre_Radio.toLowerCase().includes(term)) ||
+                            (item.Frecuencia && item.Frecuencia.toString().toLowerCase().includes(term)) ||
+                            (item.Zona_Servicio && item.Zona_Servicio.toLowerCase().includes(term))
+                        )
+                    );
+
+                    // Get the results list element
+                    const resultsList = document.getElementById('results');
+                    // Clear any previous results
+                    resultsList.innerHTML = '';
+
+                    // Loop through the filtered results and create list items for each
+                    results.forEach(item => {
+                        const li = document.createElement('li');
+                        // Set the text content of the list item to include radio details
+                        li.textContent = `${item.Nombre_Radio} ${item.Zona_Servicio} ${item.Frecuencia} ${item.Tipo}`;
+                        // Append the list item to the results list
+                        resultsList.appendChild(li);
+                    });
+                });
+        });
+    </script>
+</body>
+</html>
