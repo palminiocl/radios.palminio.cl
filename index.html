@@ -4,46 +4,144 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Base de datos de RADIOS FM/AM de Chile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #202124;
+            text-align: center;
+        }
+
+        #searchInput {
+            width: 90%;
+            max-width: 600px;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            outline: none;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+            transition: box-shadow 0.2s ease-in-out;
+        }
+
+        #searchInput:focus {
+            box-shadow: 0 1px 8px rgba(32, 33, 36, 0.35);
+        }
+
+        #results {
+            margin-top: 20px;
+            width: 90%;
+            max-width: 600px;
+            list-style: none;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #dfe1e5;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #results li {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 1rem;
+            color: #202124;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        #results li:hover {
+            background-color: #f1f3f4;
+        }
+
+        #results li:last-child {
+            border-bottom: none;
+        }
+
+        #results li span {
+            font-weight: bold;
+            color: #5f6368;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            #searchInput {
+                font-size: 0.9rem;
+                padding: 10px 14px;
+            }
+
+            #results li {
+                font-size: 0.9rem;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+            }
+
+            #searchInput {
+                font-size: 0.85rem;
+                padding: 8px 12px;
+            }
+
+            #results {
+                max-height: 200px;
+            }
+
+            #results li {
+                font-size: 0.85rem;
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-    
-    <!-- Input field for the user to type their search query -->
+    <h1>Base de datos de RADIOS FM/AM de Chile</h1>
     <input type="text" id="searchInput" placeholder="Buscar...">
-    
-    <!-- Unordered list to display the search results -->
     <ul id="results"></ul>
 
     <script>
-        // Add an event listener to the search input field to detect user input
         document.getElementById('searchInput').addEventListener('input', function() {
-            // Get the user's query, convert it to lowercase, trim whitespace, and split it into terms
             const query = this.value.toLowerCase().trim().replace(/\s+/g, ' ').split(' ');
 
-            // Fetch the JSON file containing the radio data
             fetch('listado_clean.json')
-                .then(response => response.json()) // Parse the JSON response
+                .then(response => response.json())
                 .then(data => {
-                    // Filter the data based on the user's query
                     const results = data.filter(item => 
                         query.every(term => 
-                            // Check if each term matches any of the radio's properties
                             (item.Nombre_Radio && item.Nombre_Radio.toLowerCase().includes(term)) ||
                             (item.Frecuencia && item.Frecuencia.toString().toLowerCase().includes(term)) ||
                             (item.Zona_Servicio && item.Zona_Servicio.toLowerCase().includes(term))
                         )
                     );
 
-                    // Get the results list element
                     const resultsList = document.getElementById('results');
-                    // Clear any previous results
                     resultsList.innerHTML = '';
 
-                    // Loop through the filtered results and create list items for each
                     results.forEach(item => {
                         const li = document.createElement('li');
-                        // Set the text content of the list item to include radio details
                         li.textContent = `${item.Nombre_Radio} ${item.Zona_Servicio} ${item.Frecuencia} ${item.Tipo}`;
-                        // Append the list item to the results list
                         resultsList.appendChild(li);
                     });
                 });
