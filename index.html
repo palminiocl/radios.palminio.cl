@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Base de datos de RADIOS FM/AM de Chile</title>
     <style>
+        /* Estilos existentes */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -63,6 +64,7 @@
             flex-direction: column;
             align-items: flex-start;
             transition: background-color 0.2s ease-in-out;
+            cursor: pointer;
         }
 
         #results li:hover {
@@ -78,41 +80,53 @@
             color: #5f6368;
         }
 
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            #searchInput {
-                font-size: 0.9rem;
-                padding: 10px 14px;
-            }
-
-            #results li {
-                font-size: 0.9rem;
-                padding: 12px;
-            }
+        /* Estilos del modal */
+        #modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-width: 90%;
+            width: 400px;
         }
 
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.2rem;
-                margin-bottom: 15px;
-            }
+        #modal h2 {
+            margin-top: 0;
+        }
 
-            #searchInput {
-                font-size: 0.85rem;
-                padding: 8px 12px;
-            }
+        #modal p {
+            margin: 10px 0;
+        }
 
-            #results {
-                max-height: 200px;
-            }
+        #modalClose {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-            #results li {
-                font-size: 0.85rem;
-                padding: 10px;
-            }
+        #modalClose:hover {
+            background-color: #0056b3;
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
     </style>
 </head>
@@ -120,6 +134,14 @@
     <h1>Base de datos de RADIOS FM/AM de Chile</h1>
     <input type="text" id="searchInput" placeholder="Buscar...">
     <ul id="results"></ul>
+
+    <!-- Modal -->
+    <div id="overlay"></div>
+    <div id="modal">
+        <h2 id="modalTitle"></h2>
+        <p id="modalContent"></p>
+        <button id="modalClose">Cerrar</button>
+    </div>
 
     <script>
         document.getElementById('searchInput').addEventListener('input', function() {
@@ -142,10 +164,48 @@
                     results.forEach(item => {
                         const li = document.createElement('li');
                         li.textContent = `${item.Nombre_Radio} ${item.Zona_Servicio} ${item.Frecuencia} ${item.Tipo}`;
+                        li.addEventListener('click', () => showModal(item));
                         resultsList.appendChild(li);
                     });
                 });
         });
+
+        function showModal(item) {
+            document.getElementById('modalTitle').textContent = item.Nombre_Radio;
+            document.getElementById('modalContent').innerHTML = `
+                <p><strong>📡 Señal:</strong> ${item.Señal}</p>
+                <p><strong>🎙️ Tipo:</strong> ${item.Tipo}</p>
+                <p><strong>📋 Código Región:</strong> ${item.Cod_Reg}</p>
+                <p><strong>🌎 Región:</strong> ${item.Región}</p>
+                <p><strong>📍 Zona de Servicio:</strong> ${item.Zona_Servicio}</p>
+                <p><strong>📻 Frecuencia:</strong> ${item.Frecuencia}</p>
+                <p><strong>⚡ Potencia:</strong> ${item.Potencia}</p>
+                <p><strong>🏷️ Nombre de la Radio:</strong> ${item.Nombre_Radio}</p>
+                <p><strong>🏢 Concesionaria:</strong> ${item.Concesionaria}</p>
+                <p><strong>🆔 RUT:</strong> ${item.RUT}</p>
+                <p><strong>📜 Tipo de Concesión:</strong> ${item.Tipo_Concesión}</p>
+                <p><strong>📅 Fecha:</strong> ${item.Fecha}</p>
+                <p><strong>🏠 Dirección del Estudio:</strong> ${item.Dirección_Estudio}</p>
+                <p><strong>🏘️ Comuna del Estudio:</strong> ${item.Comuna_Estudio}</p>
+                <p><strong>🌐 Región del Estudio:</strong> ${item.Región_Estudio}</p>
+                <p><strong>🏭 Dirección de la Planta:</strong> ${item.Dirección_Planta}</p>
+                <p><strong>🏙️ Comuna de la Planta:</strong> ${item.Comuna_Planta}</p>
+                <p><strong>🗺️ Región de la Planta:</strong> ${item.Región_Planta}</p>
+                <p><strong>📍 Latitud:</strong> ${item.Latitud}</p>
+                <p><strong>📍 Longitud:</strong> ${item.Longitud}</p>
+                <p><strong>🗺️ Datum:</strong> ${item.Datum}</p>
+            `;
+            document.getElementById('modal').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        document.getElementById('overlay').addEventListener('click', closeModal);
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
     </script>
 </body>
 </html>
