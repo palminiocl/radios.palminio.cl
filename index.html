@@ -5,24 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Base de datos de RADIOS FM/AM de Chile</title>
     <style>
-        /* Estilos existentes */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
             background-color: #f8f9fa;
         }
 
         h1 {
             font-size: 2rem;
-            margin-bottom: 20px;
+            margin: 20px 0;
             color: #202124;
             text-align: center;
+        }
+
+        #searchContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 10px 0;
         }
 
         #searchInput {
@@ -35,6 +40,8 @@
             outline: none;
             box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
             transition: box-shadow 0.2s ease-in-out;
+            margin: 0 auto;
+            display: block;
         }
 
         #searchInput:focus {
@@ -42,17 +49,11 @@
         }
 
         #results {
-            margin-top: 20px;
-            width: 90%;
-            max-width: 600px;
+            margin-top: 80px; /* Espacio para el buscador fijo */
+            width: 100%;
             list-style: none;
             padding: 0;
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #dfe1e5;
-            border-radius: 8px;
             background-color: #ffffff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         #results li {
@@ -78,6 +79,7 @@
         #results li span {
             font-weight: bold;
             color: #5f6368;
+            
         }
 
         /* Estilos del modal */
@@ -131,8 +133,10 @@
     </style>
 </head>
 <body>
-    <h1>Base de datos de RADIOS FM/AM de Chile</h1>
-    <input type="text" id="searchInput" placeholder="Buscar...">
+    <div id="searchContainer">
+        <h1>Base de datos de RADIOS FM/AM de Chile</h1>
+        <input type="text" id="searchInput" placeholder="Buscar...">
+    </div>
     <ul id="results"></ul>
 
     <!-- Modal -->
@@ -163,7 +167,7 @@
 
                     results.forEach(item => {
                         const li = document.createElement('li');
-                        li.textContent = `${item.Nombre_Radio} ${item.Zona_Servicio} ${item.Frecuencia} ${item.Tipo}`;
+                        li.textContent = `📻 ${item.Nombre_Radio} 🌍 ${item.Zona_Servicio} 📶 ${item.Frecuencia} 🎙️ ${item.Tipo}`;
                         li.addEventListener('click', () => showModal(item));
                         resultsList.appendChild(li);
                     });
