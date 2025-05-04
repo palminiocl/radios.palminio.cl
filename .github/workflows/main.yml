@@ -34,7 +34,9 @@ jobs:
             - name: Setup Node.js
               uses: actions/setup-node@v3
               with:
-                node-version: '16' # Usa la versión de Node.js que necesites
+                node-version: '20' # Usa la versión de Node.js que necesites
+            - name: Install dependencies
+              run: npm install
             - name: Run script.js
               run: node script.js
             - name: Setup Pages
