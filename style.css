@@ -1,7 +1,13 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background-color: #f4f6f8;
     color: #212529;
+    overflow-x: hidden;
+
 }
 #map {
     width: 100%;
@@ -11,16 +17,19 @@ body {
     border: 1px solid #ccc;
 }
 
-/* Contenedor del buscador */
 #searchContainer {
     position: fixed;
     width: 100%;
+    max-width: 100vw; /* Nueva línea */
     top: 0;
+    left: 0;
     background-color: #fff;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     padding: 20px;
+    box-sizing: border-box; /* Asegura que el padding no lo expanda */
 }
+
 
 /* Título y subtítulo */
 #titleContainer {
