@@ -104,25 +104,26 @@
                 <div id="map"></div>
             `;
 
-            if (item.Latitud != null && item.Longitud != null) {
-                // Initialize the map
-                const map = L.map('map').setView([item.Latitud, item.Longitud], 13);
-
-                // Add tiles
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; OpenStreetMap'
-                }).addTo(map);
-
-                // Add marker
-                L.marker([item.Latitud, item.Longitud]).addTo(map)
-                    .bindPopup(`<strong>${item.Nombre_Radio}</strong><br>${item.Zona_Servicio}`)
-                    .openPopup();
-
-            } else {
-                document.getElementById('map').innerHTML = '<p>Ubicación no disponible</p>';
-            }
             document.getElementById('modal').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
+            setTimeout(() => {
+                if (item.Latitud != null && item.Longitud != null) {
+                    const map = L.map('map').setView([item.Latitud, item.Longitud], 13);
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap'
+                    }).addTo(map);
+
+                    L.marker([item.Latitud, item.Longitud]).addTo(map)
+                        .bindPopup(`<strong>${item.Nombre_Radio}</strong><br>${item.Zona_Servicio}`)
+                        .openPopup();
+
+                    map.invalidateSize(); // <-- fuerza el re-render del mapa
+                } else {
+                    document.getElementById('map').innerHTML = '<p>Ubicación no disponible</p>';
+                }
+            }, 100); // pequeño retardo para dar tiempo a que el modal se muestre
+                
         }
 
 
