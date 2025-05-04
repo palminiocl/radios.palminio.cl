@@ -1,43 +1,124 @@
 const XLSX = require("xlsx");
 const fs = require("fs");
+const axios = require("axios");
+const path = require("path");
+const cheerio = require("cheerio");
 
-// Cargar el archivo Excel
-const filePath = "Actualiza_Febrero_2025_web.xlsx";
-const workbook = XLSX.readFile(filePath);
+let filePath = "";
 
-// Seleccionar la hoja "Listado"
-const sheetName = "Listado";
-const sheet = workbook.Sheets[sheetName];
+// Descargar el archivo Excel desde la URL si no existe
+async function downloadExcel() {
+    const url = "https://www.subtel.gob.cl/inicio-concesionario/servicios-de-telecomunicaciones/servicios-de-radiodifusion-sonora/";
+    const response = await axios.get(url);
+    const $ = cheerio.load(response.data);
 
-// Convertir la hoja en JSON
-let jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+    // Buscar el enlace con el texto "Descargar archivo en formato XLS"
+    const link = $("a:contains('Descargar archivo en formato XLS')").attr("href");
+    if (!link) {
+        throw new Error("No se encontró el enlace para descargar el archivo.");
+    }
 
-// Eliminar las primeras filas innecesarias (ajustar si cambia la estructura)
-jsonData = jsonData.slice(4);
+    const fileUrl = link.startsWith("http") ? link : new URL(link, url).href;
+    const fileName = path.basename(fileUrl);
+    filePath = path.resolve(__dirname, fileName);
 
-// Renombrar columnas con nombres más claros
-const headers = [
-    "Señal", "Tipo", "Cod_Reg", "Región", "Zona_Servicio", "Frecuencia",
-    "Potencia", "Nombre_Radio", "Concesionaria", "RUT", "Tipo_Concesión",
-    "Fecha", "Dirección_Estudio", "Comuna_Estudio", "Región_Estudio",
-    "Dirección_Planta", "Comuna_Planta", "Región_Planta", "Latitud", "Longitud",
-    "Datum"
-];
+    // Verificar si el archivo ya existe
+    if (fs.existsSync(filePath)) {
+        console.log(`✅ El archivo ya existe en: ${filePath}`);
+        return filePath;
+    }
 
-// Convertir los datos a un array de objetos
-const cleanData = jsonData.map(row => {
-    let obj = {};
-    headers.forEach((header, index) => {
-        obj[header] = header === "RUT" ? String(row[index] || "") : row[index] || null; // Convertir RUT a string
+    const fileResponse = await axios({
+        url: fileUrl,
+        method: "GET",
+        responseType: "stream",
     });
-    return obj;
-});
 
-// Filtrar filas vacías
-const filteredData = cleanData.filter(row => row.Señal);
+    const writer = fs.createWriteStream(filePath);
+    fileResponse.data.pipe(writer);
 
-// Guardar en un archivo JSON
-const jsonPath = "listado_clean.json";
-fs.writeFileSync(jsonPath, JSON.stringify(filteredData, null, 4), "utf8");
+    return new Promise((resolve, reject) => {
+        writer.on("finish", () => resolve(filePath));
+        writer.on("error", reject);
+    });
+}
 
-console.log(`✅ Archivo JSON guardado en: ${jsonPath}`);
+(async () => {
+    try {
+        const downloadedFilePath = await downloadExcel();
+        console.log(`✅ Archivo descargado en: ${downloadedFilePath}`);
+
+        // Cargar el archivo Excel
+        const workbook = XLSX.readFile(downloadedFilePath);
+
+        // Seleccionar la hoja "Listado"
+        const sheetName = "Listado";
+        const sheet = workbook.Sheets[sheetName];
+
+        // Convertir la hoja en JSON
+        let jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        // Eliminar las primeras filas innecesarias (ajustar si cambia la estructura)
+        jsonData = jsonData.slice(4);
+
+        // Renombrar columnas con nombres más claros
+        const headers = [
+            "Señal", "Tipo", "Cod_Reg", "Región", "Zona_Servicio", "Frecuencia",
+            "Potencia", "Nombre_Radio", "Concesionaria", "RUT", "Tipo_Concesión",
+            "Fecha", "Dirección_Estudio", "Comuna_Estudio", "Región_Estudio",
+            "Dirección_Planta", "Comuna_Planta", "Región_Planta", "Latitud", "Longitud",
+            "Datum"
+        ];
+
+        // Convertir los datos a un array de objetos
+        // Convertir los datos a un array de objetos
+        const cleanData = jsonData.map(row => {
+            let obj = {};
+            headers.forEach((header, index) => {
+            if (header === "RUT" && row[index]) {
+                // Convertir RUT a string con formato
+                obj[header] = String(row[index]).replace(/^(\d{1,2})(\d{3})(\d{3})-?(\w{1})$/, "$1.$2.$3-$4");
+            } else if (header === "Fecha" && row[index]) {
+                const excelDate = row[index];
+                let jsDate;
+
+                if (typeof excelDate === 'number') {
+                // Convertir fecha de Excel a JS
+                jsDate = new Date((excelDate - 25569) * 86400 * 1000);
+                } else if (typeof excelDate === 'string') {
+                // Intentar convertir el string a una fecha
+                jsDate = new Date(excelDate);
+                // Verificar si la conversión fue exitosa
+                if (isNaN(jsDate.getTime())) {
+                    jsDate = null; // O asignar un valor por defecto
+                }
+                }
+
+                obj[header] = jsDate ? jsDate.toISOString().split("T")[0] : null; // Formato YYYY-MM-DD
+            } else if ((header === "Latitud" || header === "Longitud") && row[index]) {
+                // Convertir coordenadas de formato GMS número 000 a formato decimal
+                const gms = String(row[index]).padStart(6, "0");
+                const degrees = parseInt(gms.slice(0, 2), 10);
+                const minutes = parseInt(gms.slice(2, 4), 10);
+                const seconds = parseInt(gms.slice(4, 6), 10);
+                obj[header] = -(degrees + (minutes / 60) + (seconds / 3600)); // Negativo para el hemisferio sur y oeste
+            } else {
+                obj[header] = row[index] || null;
+            }
+            });
+            return obj;
+        });
+
+
+        // Filtrar filas vacías
+        const filteredData = cleanData.filter(row => row.Señal);
+
+        // Guardar en un archivo JSON
+        const jsonPath = "listado_clean.json";
+        fs.writeFileSync(jsonPath, JSON.stringify(filteredData, null, 4), "utf8");
+
+        console.log(`✅ Archivo JSON guardado en: ${jsonPath}`);
+    } catch (error) {
+        console.error("❌ Error al descargar o procesar el archivo:", error.message);
+    }
+})();

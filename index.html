@@ -4,139 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Base de datos de RADIOS FM/AM de Chile</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-        }
-
-        h1 {
-            font-size: 2rem;
-            margin: 20px 0;
-            color: #202124;
-            text-align: center;
-        }
-
-        #searchContainer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            padding: 10px 0;
-        }
-
-        #searchInput {
-            width: 90%;
-            max-width: 600px;
-            padding: 12px 16px;
-            font-size: 1rem;
-            border: 1px solid #dfe1e5;
-            border-radius: 24px;
-            outline: none;
-            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
-            transition: box-shadow 0.2s ease-in-out;
-            margin: 0 auto;
-            display: block;
-        }
-
-        #searchInput:focus {
-            box-shadow: 0 1px 8px rgba(32, 33, 36, 0.35);
-        }
-
-        #results {
-            margin-top: 80px; /* Espacio para el buscador fijo */
-            width: 100%;
-            list-style: none;
-            padding: 0;
-            background-color: #ffffff;
-        }
-
-        #results li {
-            padding: 15px;
-            border-bottom: 1px solid #e0e0e0;
-            font-size: 1rem;
-            color: #202124;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            transition: background-color 0.2s ease-in-out;
-            cursor: pointer;
-        }
-
-        #results li:hover {
-            background-color: #f1f3f4;
-        }
-
-        #results li:last-child {
-            border-bottom: none;
-        }
-
-        #results li span {
-            font-weight: bold;
-            color: #5f6368;
-            
-        }
-
-        /* Estilos del modal */
-        #modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            max-width: 90%;
-            width: 400px;
-        }
-
-        #modal h2 {
-            margin-top: 0;
-        }
-
-        #modal p {
-            margin: 10px 0;
-        }
-
-        #modalClose {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        #modalClose:hover {
-            background-color: #0056b3;
-        }
-
-        #overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    
+    <link rel="stylesheet" href="style.css">
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
 </head>
 <body>
     <div id="searchContainer">
-        <h1>Base de datos de RADIOS FM/AM de Chile</h1>
-        <input type="text" id="searchInput" placeholder="Buscar...">
+        <div id="titleContainer" class="header">
+            <h1><img src="https://img.icons8.com/color/48/radio.png" alt="Radio" style="vertical-align: middle; margin-right: 8px;">Radios FM/AM de Chile</h1>
+            <p>Consulta interactiva de concesiones por zona, frecuencia y tipo</p>
+        </div>
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="Buscar...">
+        </div>
     </div>
+    
+    
     <ul id="results"></ul>
 
     <!-- Modal -->
@@ -150,8 +40,7 @@
     <script>
         document.getElementById('searchInput').addEventListener('input', function() {
             const query = this.value.toLowerCase().trim().replace(/\s+/g, ' ').split(' ');
-
-            fetch('listado_clean.json')
+            fetch('./listado_clean.json')
                 .then(response => response.json())
                 .then(data => {
                     const results = data.filter(item => 
@@ -166,8 +55,12 @@
                     resultsList.innerHTML = '';
 
                     results.forEach(item => {
+                        
                         const li = document.createElement('li');
-                        li.textContent = `📻 ${item.Nombre_Radio} 🌍 ${item.Zona_Servicio} 📶 ${item.Frecuencia} 🎙️ ${item.Tipo}`;
+                        li.innerHTML = `
+                            <strong>${item.Nombre_Radio}</strong>
+                            <span style="margin-top: 5px;">🌍 ${item.Zona_Servicio} &nbsp;|&nbsp; 📶 ${item.Frecuencia} MHz &nbsp;|&nbsp; 
+                                ${item.Tipo === 'AM' ? '🟠' : item.Tipo === 'FM' ? '🔵' : '🟢'} ${item.Tipo}</span>`;
                         li.addEventListener('click', () => showModal(item));
                         resultsList.appendChild(li);
                     });
@@ -198,10 +91,30 @@
                 <p><strong>📍 Latitud:</strong> ${item.Latitud}</p>
                 <p><strong>📍 Longitud:</strong> ${item.Longitud}</p>
                 <p><strong>🗺️ Datum:</strong> ${item.Datum}</p>
+                <div id="map"></div>
             `;
+
+            if (item.Latitud != null && item.Longitud != null) {
+                // Initialize the map
+                const map = L.map('map').setView([item.Latitud, item.Longitud], 13);
+
+                // Add tiles
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap'
+                }).addTo(map);
+
+                // Add marker
+                L.marker([item.Latitud, item.Longitud]).addTo(map)
+                    .bindPopup(`<strong>${item.Nombre_Radio}</strong><br>${item.Zona_Servicio}`)
+                    .openPopup();
+
+            } else {
+                document.getElementById('map').innerHTML = '<p>Ubicación no disponible</p>';
+            }
             document.getElementById('modal').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
         }
+
 
         document.getElementById('modalClose').addEventListener('click', closeModal);
         document.getElementById('overlay').addEventListener('click', closeModal);
@@ -211,5 +124,27 @@
             document.getElementById('overlay').style.display = 'none';
         }
     </script>
+    <script>
+        let lastScrollTop = 0;
+        const titleContainer = document.getElementById('titleContainer');
+    
+        window.addEventListener('scroll', function() {
+            const st = window.pageYOffset || document.documentElement.scrollTop;
+            if (st > lastScrollTop && st > 20) {
+                // Scroll hacia abajo
+                titleContainer.style.display = 'none';
+            } else {
+                // Scroll hacia arriba
+                titleContainer.style.display = 'block';
+            }
+            lastScrollTop = st <= 0 ? 0 : st;
+        }, false);
+    </script>
+    
+    <footer >
+        Hecho con ❤️ en Chile · Fuente: <a style="color: #007bff" href="https://www.subtel.gob.cl/inicio-concesionario/servicios-de-telecomunicaciones/servicios-de-radiodifusion-sonora/">SUBTEL</a> · Última actualización: Marzo 2025<br>
+        <a href="#" style="color: #007bff; text-decoration: none;">Ir al inicio</a>
+    </footer>
+    
 </body>
 </html>
