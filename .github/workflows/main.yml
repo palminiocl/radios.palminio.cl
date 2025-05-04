@@ -41,11 +41,17 @@ jobs:
               run: node script.js
             - name: Setup Pages
               uses: actions/configure-pages@v5
+            - name: Move files to publish directory
+              run: |
+                mkdir -p ./public
+                cp index.html ./public/
+                cp style.css ./public/
+                cp listado_clean.json ./public/
+
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v3
               with:
-                # Upload entire repository
-                path: '.'
+                path: public
             - name: Deploy to GitHub Pages
               id: deployment
               uses: actions/deploy-pages@v4
