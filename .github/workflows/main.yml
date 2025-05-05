@@ -37,17 +37,10 @@ jobs:
                 node-version: '20' # Usa la versión de Node.js que necesites
             - name: Install dependencies
               run: npm install
-            - name: Run script.js
-              run: node script.js
+            - name: Run ETL
+              run: npm run etl
             - name: Setup Pages
               uses: actions/configure-pages@v5
-            - name: Move files to publish directory
-              run: |
-                mkdir -p ./public
-                cp index.html ./public/
-                cp style.css ./public/
-                cp listado_clean.json ./public/
-
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v3
               with:

@@ -4,7 +4,9 @@
   "description": "Este proyecto implementa un proceso ETL (Extracción, Transformación y Carga) sobre un archivo Excel que contiene información de concesiones de radio. ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "etl": "node etl/script.js",
+    "clean": "rm etl/*.xlsx public/*.json"
   },
   "author": "Lucas Palminio",
   "license": "ISC",

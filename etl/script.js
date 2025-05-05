@@ -114,7 +114,7 @@ async function downloadExcel() {
         const filteredData = cleanData.filter(row => row.Señal);
 
         // Guardar en un archivo JSON
-        const jsonPath = "listado_clean.json";
+        const jsonPath = "public/listado_clean.json";
         fs.writeFileSync(jsonPath, JSON.stringify(filteredData, null, 4), "utf8");
 
         console.log(`✅ Archivo JSON guardado en: ${jsonPath}`);
