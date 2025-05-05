@@ -23,12 +23,13 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""></script>
+    <link rel="icon" href="img/icons8-radio-48.png" type="image/x-icon">
 </head>
 <body>
     
     <div id="searchContainer">
         <div id="titleContainer" class="header">
-            <h1><img src="https://img.icons8.com/color/48/radio.png" alt="Radio" style="vertical-align: middle; margin-right: 8px;">Radios FM/AM de Chile</h1>
+            <h1><img src="img/icons8-radio-48.png" alt="Radio" style="vertical-align: middle; margin-right: 8px;">Radios FM/AM de Chile</h1>
             <p>Consulta interactiva de concesiones por zona, frecuencia y tipo</p>
         </div>
         <div class="search-wrapper">
@@ -50,31 +51,34 @@
     <script>
         document.getElementById('searchInput').addEventListener('input', function() {
             const query = this.value.toLowerCase().trim().replace(/\s+/g, ' ').split(' ');
+            const resultsList = document.getElementById('results');
+            resultsList.innerHTML = '';
+
+            if (query.length === 1 && query[0] === '') {
+            return; // No mostrar resultados si la query está vacía
+            }
+
             fetch('./listado_clean.json')
-                .then(response => response.json())
-                .then(data => {
-                    const results = data.filter(item => 
-                        query.every(term => 
-                            (item.Nombre_Radio && item.Nombre_Radio.toLowerCase().includes(term)) ||
-                            (item.Frecuencia && item.Frecuencia.toString().toLowerCase().includes(term)) ||
-                            (item.Zona_Servicio && item.Zona_Servicio.toLowerCase().includes(term))
-                        )
-                    );
+            .then(response => response.json())
+            .then(data => {
+                const results = data.filter(item => 
+                query.every(term => 
+                    (item.Nombre_Radio && item.Nombre_Radio.toLowerCase().includes(term)) ||
+                    (item.Frecuencia && item.Frecuencia.toString().toLowerCase().includes(term)) ||
+                    (item.Zona_Servicio && item.Zona_Servicio.toLowerCase().includes(term))
+                )
+                );
 
-                    const resultsList = document.getElementById('results');
-                    resultsList.innerHTML = '';
-
-                    results.forEach(item => {
-                        
-                        const li = document.createElement('li');
-                        li.innerHTML = `
-                            <strong>${item.Nombre_Radio}</strong>
-                            <span style="margin-top: 5px;">🌍 ${item.Zona_Servicio} &nbsp;|&nbsp; 📶 ${item.Frecuencia} MHz &nbsp;|&nbsp; 
-                                ${item.Tipo === 'AM' ? '🟠' : item.Tipo === 'FM' ? '🔵' : '🟢'} ${item.Tipo}</span>`;
-                        li.addEventListener('click', () => showModal(item));
-                        resultsList.appendChild(li);
-                    });
+                results.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <strong>${item.Nombre_Radio}</strong>
+                    <span style="margin-top: 5px;">🌍 ${item.Zona_Servicio} &nbsp;|&nbsp; 📶 ${item.Frecuencia} MHz &nbsp;|&nbsp; 
+                    ${item.Tipo === 'AM' ? '🟠' : item.Tipo === 'FM' ? '🔵' : '🟢'} ${item.Tipo}</span>`;
+                li.addEventListener('click', () => showModal(item));
+                resultsList.appendChild(li);
                 });
+            });
         });
 
         function showModal(item) {
@@ -139,6 +143,7 @@
     
     <footer >
         Hecho con ❤️ en Chile · Fuente: <a style="color: #007bff" href="https://www.subtel.gob.cl/inicio-concesionario/servicios-de-telecomunicaciones/servicios-de-radiodifusion-sonora/">SUBTEL</a> · Última actualización: Marzo 2025<br>
+        <a target="_blank" href="https://icons8.com/icon/12793/radio" style="color: #007bff; text-decoration: none;">Radio</a> icon by <a target="_blank" href="https://icons8.com" style="color: #007bff; text-decoration: none;">Icons8</a> <br>
         <a href="#" style="color: #007bff; text-decoration: none;">Ir al inicio</a>
     </footer>
     
