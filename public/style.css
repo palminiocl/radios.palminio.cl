@@ -7,6 +7,8 @@ body {
     background-color: #f4f6f8;
     color: #212529;
     overflow-x: hidden;
+    margin: 0;
+    padding: 0;
 
 }
 #map {
@@ -18,18 +20,25 @@ body {
 }
 
 #searchContainer {
-    position: fixed;
+    position: sticky; /* Cambiado de fixed a relative */
     width: 100%;
     max-width: 100vw; /* Nueva línea */
     top: 0;
-    left: 0;
     background-color: #fff;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     padding: 20px;
-    box-sizing: border-box; /* Asegura que el padding no lo expanda */
+    box-sizing: border-box;
+
 }
 
+#results {
+    margin: 20px auto 0; /* Ajusta el margen superior */
+    padding: 0 10px;
+    list-style: none;
+    max-width: 800px;
+    position: relative; /* Asegura que esté en el mismo flujo que searchContainer */
+}
 
 /* Título y subtítulo */
 #titleContainer {
@@ -86,12 +95,7 @@ body {
 }
 
 /* Resultados */
-#results {
-    margin: 160px auto 0;
-    padding: 0 10px;
-    list-style: none;
-    max-width: 800px;
-}
+
 
 #results li {
     background-color: #fff;

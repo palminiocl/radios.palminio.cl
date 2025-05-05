@@ -135,22 +135,7 @@
             document.getElementById('overlay').style.display = 'none';
         }
     </script>
-    <script>
-        let lastScrollTop = 0;
-        const titleContainer = document.getElementById('titleContainer');
-    
-        window.addEventListener('scroll', function() {
-            const st = window.pageYOffset || document.documentElement.scrollTop;
-            if (st > lastScrollTop && st > 20) {
-                // Scroll hacia abajo
-                titleContainer.style.display = 'none';
-            } else {
-                // Scroll hacia arriba
-                titleContainer.style.display = 'block';
-            }
-            lastScrollTop = st <= 0 ? 0 : st;
-        }, false);
-    </script>
+
     
     <footer >
         Hecho con ❤️ en Chile · Fuente: <a style="color: #007bff" href="https://www.subtel.gob.cl/inicio-concesionario/servicios-de-telecomunicaciones/servicios-de-radiodifusion-sonora/">SUBTEL</a> · Última actualización: Marzo 2025<br>
