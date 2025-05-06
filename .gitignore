@@ -23,6 +23,3 @@ Thumbs.db
 
 # Ignore Excel files
 *.xlsx
-
-# Ignore JSON files
-*.json
