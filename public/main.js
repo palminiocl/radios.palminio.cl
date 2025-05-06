@@ -1,4 +1,22 @@
-document.getElementById('searchInput').addEventListener('input', function() {
+const listado = await fetch('./listado_clean.json').then((response) => {
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.json();
+}).catch((error) => {
+    console.error('There has been a problem with your fetch operation:', error);
+    return [];
+}); // Se carga el listado de radios desde el archivo JSON una vez al inicio
+
+document.getElementById('searchInput').addEventListener('input', function (e) {
+    if (listado.length === 0) {
+        const etiqueta = document.createElement('li');
+        const mensaje = document.createElement('strong');
+        mensaje.textContent = '😔 Error al cargar los datos'
+        etiqueta.appendChild(mensaje);
+        document.getElementById('results').appendChild(etiqueta);
+        return;
+    }
     const query = this.value.toLowerCase().trim().replace(/\s+/g, ' ').split(' ');
     const resultsList = document.getElementById('results');
     resultsList.innerHTML = '';
@@ -7,56 +25,60 @@ document.getElementById('searchInput').addEventListener('input', function() {
     return; // No mostrar resultados si la query está vacía
     }
 
-    fetch('./listado_clean.json')
-    .then(response => response.json())
-    .then(data => {
-        const results = data.filter(item => 
-        query.every(term => 
-            (item.Nombre_Radio && item.Nombre_Radio.toLowerCase().includes(term)) ||
-            (item.Frecuencia && item.Frecuencia.toString().toLowerCase().includes(term)) ||
-            (item.Zona_Servicio && item.Zona_Servicio.toLowerCase().includes(term))
-        )
+        const results = listado.filter(item => 
+            query.every(term => 
+                (item.Nombre_Radio && item.Nombre_Radio.toLowerCase().includes(term)) ||
+                (item.Frecuencia && item.Frecuencia.toString().toLowerCase().includes(term)) ||
+                (item.Zona_Servicio && item.Zona_Servicio.toLowerCase().includes(term))
+            )
         );
 
-        results.forEach(item => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <strong>${item.Nombre_Radio}</strong>
-            <span style="margin-top: 5px;">🌍 ${item.Zona_Servicio} &nbsp;|&nbsp; 📶 ${item.Frecuencia} MHz &nbsp;|&nbsp; 
-            ${item.Tipo === 'AM' ? '🟠' : item.Tipo === 'FM' ? '🔵' : '🟢'} ${item.Tipo}</span>`;
-        li.addEventListener('click', () => showModal(item));
-        resultsList.appendChild(li);
+        results.forEach(item => { // Crear un elemento <li> para cada resultado
+            const li = document.createElement('li');
+            const nombreRadioStrong = document.createElement('strong');
+            nombreRadioStrong.textContent = item.Nombre_Radio;
+            const spanRadioInfo = document.createElement('span');
+            spanRadioInfo.textContent = `🌍 ${item.Zona_Servicio} | 📶 ${item.Frecuencia} ${item.Tipo === 'AM' ? 'kHz' :  'MHz'} | ${item.Tipo === 'AM' ? '🟠' : item.Tipo === 'FM' ? '🔵' : '🟢'} ${item.Tipo}`;
+            li.appendChild(nombreRadioStrong);
+            li.appendChild(spanRadioInfo);
+            li.classList.toggle(`${item.Tipo}`);
+            li.addEventListener('click', () => showModal(item));
+            resultsList.appendChild(li);
         });
-    });
 });
 
 function showModal(item) {
-
+    const caracteristicas = [
+        {nombre: '📡 Señal', valor: item.Señal},
+        {nombre: '🎙️ Tipo', valor: item.Tipo},
+        {nombre: '📋 Código Región', valor: item.Cod_Reg},
+        {nombre: '🌎 Región', valor: item.Región},
+        {nombre: '📍 Zona de Servicio', valor: item.Zona_Servicio},
+        {nombre: '📻 Frecuencia', valor: `${item.Frecuencia} ${item.Tipo === 'AM' ? 'kHz' :  'MHz'}`},
+        {nombre: '⚡ Potencia', valor: `${item.Potencia} W`},
+        {nombre: '🏷️ Nombre de la Radio', valor: item.Nombre_Radio},
+        {nombre: '🏢 Concesionaria', valor: item.Concesionaria},
+        {nombre: '🆔 RUT', valor: item.RUT},
+        {nombre: '📜 Tipo de Concesión', valor: item.Tipo_Concesión},
+        {nombre: '📅 Fecha', valor: item.Fecha},
+        {nombre: '🏠 Dirección del Estudio', valor: item.Dirección_Estudio},
+        {nombre: '🏘️ Comuna del Estudio', valor: item.Comuna_Estudio},
+        {nombre: '🌐 Región del Estudio', valor: item.Región_Estudio},
+        {nombre: '📡 Dirección de la Antena', valor: item.Dirección_Planta},
+        {nombre: '🏙️ Comuna de la Antena', valor: item.Comuna_Planta},
+        {nombre: '🗺️ Región de la Antena', valor: item.Región_Planta},
+        {nombre: '📍 Latitud antena', valor: item.Latitud},
+        {nombre: '📍 Longitud antena', valor: item.Longitud}
+    ]
     document.getElementById('modalTitle').textContent = item.Nombre_Radio;
-    document.getElementById('modalContent').innerHTML = `
-        <p><strong>📡 Señal:</strong> ${item.Señal}</p>
-        <p><strong>🎙️ Tipo:</strong> ${item.Tipo}</p>
-        <p><strong>📋 Código Región:</strong> ${item.Cod_Reg}</p>
-        <p><strong>🌎 Región:</strong> ${item.Región}</p>
-        <p><strong>📍 Zona de Servicio:</strong> ${item.Zona_Servicio}</p>
-        <p><strong>📻 Frecuencia:</strong> ${item.Frecuencia}</p>
-        <p><strong>⚡ Potencia:</strong> ${item.Potencia}</p>
-        <p><strong>🏷️ Nombre de la Radio:</strong> ${item.Nombre_Radio}</p>
-        <p><strong>🏢 Concesionaria:</strong> ${item.Concesionaria}</p>
-        <p><strong>🆔 RUT:</strong> ${item.RUT}</p>
-        <p><strong>📜 Tipo de Concesión:</strong> ${item.Tipo_Concesión}</p>
-        <p><strong>📅 Fecha:</strong> ${item.Fecha}</p>
-        <p><strong>🏠 Dirección del Estudio:</strong> ${item.Dirección_Estudio}</p>
-        <p><strong>🏘️ Comuna del Estudio:</strong> ${item.Comuna_Estudio}</p>
-        <p><strong>🌐 Región del Estudio:</strong> ${item.Región_Estudio}</p>
-        <p><strong>📡 Dirección de la Antena:</strong> ${item.Dirección_Planta}</p>
-        <p><strong>🏙️ Comuna de la Antena:</strong> ${item.Comuna_Planta}</p>
-        <p><strong>🗺️ Región de la Antena:</strong> ${item.Región_Planta}</p>
-        <p><strong>📍 Latitud antena:</strong> ${item.Latitud}</p>
-        <p><strong>📍 Longitud antena:</strong> ${item.Longitud}</p>
-        <p><strong>🗺️ Datum:</strong> ${item.Datum}</p>
-        <div id="map"></div>
-    `;
+    caracteristicas.forEach(caracteristica => {
+        const p = document.createElement('p');
+        p.innerHTML = `<strong>${caracteristica.nombre}:</strong> ${caracteristica.valor}`;
+        modalContent.appendChild(p);
+    });
+    const mapContainer = document.createElement('div');
+    mapContainer.id = 'map';
+    modalContent.appendChild(mapContainer);
 
     document.getElementById('modal').style.display = 'block';
     document.getElementById('overlay').style.display = 'block';
@@ -87,6 +109,7 @@ document.getElementById('overlay').addEventListener('click', closeModal);
 function closeModal() {
     const modal = document.getElementById('modal');
     modal.scrollTo(0,0);
+    modalContent.innerHTML = '';
     modal.style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
 }
