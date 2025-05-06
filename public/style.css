@@ -206,7 +206,7 @@ footer {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 900;
+    z-index: 1001;
 }
 .darkButtonContainer:hover {
     transition: all 0.3s ease;
@@ -286,5 +286,10 @@ body.dark-mode .darkButton {
     background-color: gray;
     color: #000;
 }
-
+body.dark-mode .leaflet-layer,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out,
+.leaflet-control-attribution {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
 
