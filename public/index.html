@@ -43,19 +43,24 @@
 </head>
 <body>
     
-    <header id="searchContainer">
-        <div id="titleContainer" class="header">
-            <h1><img src="img/icons8-radio-48.png" alt="Radio" style="vertical-align: middle; margin-right: 8px;">Radios FM/AM de Chile</h1>
-            <p>Consulta interactiva de concesiones por zona, frecuencia y tipo</p>
+    <header>
+        <div id="searchContainer">
+            <div id="titleContainer" class="header">
+                <h1><img src="img/icons8-radio-48.png" alt="Radio" style="vertical-align: middle; margin-right: 8px;">Radios FM/AM de Chile</h1>
+                <p>Consulta interactiva de concesiones por zona, frecuencia y tipo</p>
+            </div>
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="Buscar...">
+            </div>
         </div>
-        <div class="search-wrapper">
-            <input type="text" id="searchInput" placeholder="Buscar...">
-        </div>
+
     </header>
     
     
     <ul id="results"></ul>
-
+    <div class="darkButtonContainer">
+        <button id="darkModeButton" class="darkButton">🌙</button>
+    </div>
     <!-- Modal -->
     <div id="overlay"></div>
     <div id="modal">

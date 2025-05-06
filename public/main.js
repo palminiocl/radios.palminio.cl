@@ -31,6 +31,7 @@ document.getElementById('searchInput').addEventListener('input', function() {
 });
 
 function showModal(item) {
+
     document.getElementById('modalTitle').textContent = item.Nombre_Radio;
     document.getElementById('modalContent').innerHTML = `
         <p><strong>📡 Señal:</strong> ${item.Señal}</p>
@@ -84,9 +85,18 @@ document.getElementById('modalClose').addEventListener('click', closeModal);
 document.getElementById('overlay').addEventListener('click', closeModal);
 
 function closeModal() {
-    document.getElementById('modal').style.display = 'none';
+    const modal = document.getElementById('modal');
+    modal.scrollTo(0,0);
+    modal.style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
 }
 
 document.getElementById('searchInput').value = 'bio bio';
 document.getElementById('searchInput').dispatchEvent(new Event('input'));
+
+document.getElementById('darkModeButton').addEventListener('click', function() {
+    const body = document.body;
+    const isDarkMode = body.classList.toggle('dark-mode');
+    this.textContent = isDarkMode ? '🌞' : '🌙';
+    localStorage.setItem('darkMode', isDarkMode);
+});

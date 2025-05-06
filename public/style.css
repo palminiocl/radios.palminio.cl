@@ -5,6 +5,7 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background-color: #f4f6f8;
+    transition: background-color 1s ease, color 1s ease;
     color: #212529;
     overflow-x: hidden;
     margin: 0;
@@ -18,27 +19,23 @@ body {
     border-radius: 8px;
     border: 1px solid #ccc;
 }
-
-#searchContainer {
-    position: sticky; /* Cambiado de fixed a relative */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+header #searchContainer {
     width: 100%;
     max-width: 100vw; /* Nueva línea */
-    top: 0;
     background-color: #fff;
+    transition: background-color 1s ease, color 1s ease;
+
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
     padding: 20px;
     box-sizing: border-box;
 
 }
 
-#results {
-    margin: 20px auto 0; /* Ajusta el margen superior */
-    padding: 0 10px;
-    list-style: none;
-    max-width: 800px;
-    position: relative; /* Asegura que esté en el mismo flujo que searchContainer */
-}
 
 /* Título y subtítulo */
 #titleContainer {
@@ -60,6 +57,8 @@ body {
     margin: 4px 0 12px;
     font-size: 0.9rem;
     color: #666;
+    transition: background-color 1s ease, color 1s ease;
+
 }
 
 /* Contenedor de búsqueda */
@@ -81,6 +80,8 @@ body {
     outline: none;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     background-color: #fff;
+    transition: background-color 1s ease, color 1s ease;
+
     transition: all 0.3s ease;
     padding-left: 1rem;
 }
@@ -91,14 +92,25 @@ body {
 }
 .search-wrapper input::placeholder {
     color: #888;
+    transition: background-color 1s ease, color 1s ease;
+
     margin-left: 1rem;
 }
 
 /* Resultados */
+#results {
+    margin: 20px auto 0; /* Ajusta el margen superior */
+    padding: 0 10px;
+    list-style: none;
+    max-width: 800px;
+    position: relative; /* Asegura que esté en el mismo flujo que searchContainer */
+}
 
 
 #results li {
     background-color: #fff;
+    transition: background-color 1s ease, color 1s ease;
+
     border-radius: 10px;
     margin-bottom: 15px;
     padding: 16px 20px;
@@ -112,6 +124,7 @@ body {
 
 #results li:hover {
     background-color: #f0f2f5;
+    
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
@@ -187,6 +200,91 @@ footer {
     padding: 20px;
     color: #888;
     font-size: 0.9rem;
+}
+
+.darkButtonContainer {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 900;
+}
+.darkButtonContainer:hover {
+    transition: all 0.3s ease;
+}
+.darkButton {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease , transform 0.2s ease;
+    width: 100%;
+    height: 100%;
+}
+.darkButton:hover {
+    background-color: #444;
+    transform: scale(1.5);
+}
+
+body.dark-mode {
+    background-color: #212529;
+    color: #f8f9fa;
+}
+body.dark-mode header #searchContainer {
+    background-color: #343a40;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+body.dark-mode #titleContainer h1 {
+    color: #007bff;
+}
+body.dark-mode #titleContainer p {
+    color: #ccc;
+}
+body.dark-mode .search-wrapper input {
+    background-color: #495057;
+    color: #f8f9fa;
+    border: 1px solid #6c757d;
+}
+body.dark-mode .search-wrapper input::placeholder {
+    color: #ccc;
+}
+body.dark-mode #results li {
+    background-color: #343a40;
+    color: #f8f9fa;
+}
+body.dark-mode #results li:hover {
+    background-color: #495057;
+}
+body.dark-mode #modal {
+    background-color: #343a40;
+    color: #f8f9fa;
+}
+body.dark-mode #modal h2 {
+    color: #007bff;
+}
+body.dark-mode #modalClose {
+    background-color: #007bff;
+}
+body.dark-mode #modalClose:hover {
+    background-color: #0056b3;
+}
+body.dark-mode footer {
+    color: #ccc;
+}
+body.dark-mode footer a {
+    color: #007bff;
+}
+body.dark-mode footer a:hover {
+    color: #0056b3;
+}
+body.dark-mode #overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+body.dark-mode .darkButton {
+    background-color: gray;
+    color: #000;
 }
 
 
