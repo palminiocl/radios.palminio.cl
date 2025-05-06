@@ -35,18 +35,64 @@ document.getElementById('searchInput').addEventListener('input', function (e) {
 
         results.forEach(item => { // Crear un elemento <li> para cada resultado
             const li = document.createElement('li');
+            const div = document.createElement('div');
             const nombreRadioStrong = document.createElement('strong');
+            
+            const seleccionar = document.createElement('input');
+            seleccionar.type = 'checkbox';
+            seleccionar.classList.add('checkbox');
+            seleccionar.id = item.Señal.replace(/\s+/g, '_');
+
             nombreRadioStrong.textContent = item.Nombre_Radio;
             const spanRadioInfo = document.createElement('span');
             spanRadioInfo.textContent = `🌍 ${item.Zona_Servicio} | 📶 ${item.Frecuencia} ${item.Tipo === 'AM' ? 'kHz' :  'MHz'} | ${item.Tipo === 'AM' ? '🟠' : item.Tipo === 'FM' ? '🔵' : '🟢'} ${item.Tipo}`;
-            li.appendChild(nombreRadioStrong);
-            li.appendChild(spanRadioInfo);
+            div.appendChild(nombreRadioStrong);
+            div.appendChild(spanRadioInfo);
+            li.appendChild(seleccionar);
+            li.appendChild(div);
+
             li.classList.toggle(`${item.Tipo}`);
-            li.addEventListener('click', () => showModal(item));
+            div.addEventListener('click', () => showModal(item));
             resultsList.appendChild(li);
         });
 });
 
+document.getElementById('darkModeButton').addEventListener('click', function() {
+    const body = document.body;
+    const isDarkMode = body.classList.toggle('dark-mode');
+    this.textContent = isDarkMode ? '🌞' : '🌙';
+    localStorage.setItem('darkMode', isDarkMode);
+});
+
+document.getElementById('downloadButton').addEventListener('click', () => {
+    const selectedRadios = Array.from(document.querySelectorAll('.checkbox:checked')).map(checkbox => {
+        const id_radio = checkbox.id;
+        const radio = listado.filter(item => item.Señal === id_radio)[0];
+        return radio;
+    });
+
+    if (selectedRadios.length === 0) {
+        alert('No hay radios seleccionadas para descargar.');
+        return;
+    }
+
+    const blob = new Blob([JSON.stringify(selectedRadios, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'radios_seleccionadas.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+);
+document.getElementById('clearButton').addEventListener('click', () => {
+    const checkboxes = document.querySelectorAll('.checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+}
+);
 function showModal(item) {
     const caracteristicas = [
         {nombre: '📡 Señal', valor: item.Señal},
@@ -117,9 +163,3 @@ function closeModal() {
 document.getElementById('searchInput').value = 'bio bio';
 document.getElementById('searchInput').dispatchEvent(new Event('input'));
 
-document.getElementById('darkModeButton').addEventListener('click', function() {
-    const body = document.body;
-    const isDarkMode = body.classList.toggle('dark-mode');
-    this.textContent = isDarkMode ? '🌞' : '🌙';
-    localStorage.setItem('darkMode', isDarkMode);
-});

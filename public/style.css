@@ -108,7 +108,6 @@ header #searchContainer {
 
 
 #results li {
-    background-color: #fff;
     transition: background-color 1s ease, color 1s ease, transform 0.1s ease, box-shadow 0.2s ease;
     border-radius: 10px;
     margin-bottom: 15px;
@@ -116,9 +115,25 @@ header #searchContainer {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     font-size: 1rem;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     cursor: pointer;
 }
+#results li div{
+    flex-direction: column;
+    display: flex;
+    
+}
+#results .checkbox {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background-color: #007bff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 
 #results li:hover {
     background-color: #f0f2f5;
@@ -248,13 +263,17 @@ footer {
     font-size: 0.9rem;
 }
 
-.darkButtonContainer {
+.flotanteContainer {
     position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     bottom: 20px;
     right: 20px;
     z-index: 1001;
+
 }
-.darkButtonContainer:hover {
+.flotanteContainer:hover {
     transition: all 0.3s ease;
 }
 .darkButton {
@@ -271,7 +290,38 @@ footer {
 }
 .darkButton:hover {
     background-color: #444;
-    transform: scale(1.5);
+    transform: scale(1.05);
+}
+#downloadButton {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+#downloadButton:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+#clearButton {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+#clearButton:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
 }
 
 body.dark-mode {
