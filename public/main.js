@@ -17,7 +17,8 @@ document.getElementById('searchInput').addEventListener('input', function (e) {
         document.getElementById('results').appendChild(etiqueta);
         return;
     }
-    const query = this.value.toLowerCase().trim().replace(/\s+/g, ' ').split(' ');
+    const query = this.value.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').split(' ');
+
     const resultsList = document.getElementById('results');
     resultsList.innerHTML = '';
 
