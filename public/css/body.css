@@ -1,0 +1,19 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f4f6f8;
+    transition: background-color 1s ease, color 1s ease;
+    color: #212529;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+
+}
+
+body.dark-mode {
+    background-color: #212529;
+    color: #f8f9fa;
+}

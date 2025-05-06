@@ -1,0 +1,114 @@
+/* Resultados */
+#results {
+    margin: 20px auto 0;
+    /* Ajusta el margen superior */
+    padding: 0 10px;
+    list-style: none;
+    max-width: 800px;
+    position: relative;
+    /* Asegura que esté en el mismo flujo que searchContainer */
+}
+
+
+#results li {
+    transition: background-color 1s ease, color 1s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    padding: 16px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    font-size: 1rem;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+}
+
+#results li div {
+    flex-direction: column;
+    display: flex;
+
+}
+
+#results .checkbox {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background-color: #007bff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#results li:hover {
+    background-color: #f0f2f5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* FM Styles */
+#results li.FM {
+    background-color: #e7f3ff;
+    color: #0056b3;
+}
+
+#results li.FM:hover {
+    background-color: #d0e7ff;
+    color: #004085;
+}
+
+body.dark-mode #results li.FM {
+    background-color: #0056b3;
+    color: #fff;
+}
+
+body.dark-mode #results li.FM:hover {
+    background-color: #004085;
+}
+
+/* AM Styles */
+#results li.AM {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+#results li.AM:hover {
+    background-color: #ffeeba;
+}
+
+body.dark-mode #results li.AM {
+    background-color: #856404;
+    color: #fff;
+}
+
+body.dark-mode #results li.AM:hover {
+    background-color: #856404;
+}
+
+/* RC Styles */
+#results li.RC {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+#results li.RC:hover {
+    background-color: #c3e6cb;
+}
+
+body.dark-mode #results li.RC {
+    background-color: green;
+    color: #fff;
+}
+
+body.dark-mode #results li.RC:hover {
+    background-color: #155724;
+}
+
+body.dark-mode #results li {
+    background-color: #343a40;
+    color: #f8f9fa;
+}
+
+body.dark-mode #results li:hover {
+    background-color: #495057;
+}

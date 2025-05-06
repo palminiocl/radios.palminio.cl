@@ -1,0 +1,30 @@
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+footer p {
+    margin: 0;
+}
+
+footer a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+body.dark-mode footer {
+    color: #ccc;
+}
+
+body.dark-mode footer a {
+    color: #007bff;
+}
+
+body.dark-mode footer a:hover {
+    color: #0056b3;
+}

@@ -1,0 +1,117 @@
+.flotanteContainer {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1001;
+
+}
+
+.flotanteContainer:hover {
+    transition: all 0.3s ease;
+}
+
+.conBotones {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    display: none;
+    height: 100%;
+}
+
+.sinBotones {
+    display: flex;
+    flex-direction: inherit;
+
+}
+
+#showButtons {
+    background-color: #b700ff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+#showButtons:hover {
+    background-color: #7303a0;
+    transform: scale(1.05);
+}
+
+#hideButtons {
+    background-color: #b700ff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+#hideButtons:hover {
+    background-color: #7303a0;
+    transform: scale(1.05);
+}
+
+.darkButton {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    height: 100%;
+    margin-top: 10px;
+}
+
+.darkButton:hover {
+    background-color: #444;
+    transform: scale(1.05);
+}
+
+#downloadButton {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+#downloadButton:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+#clearButton {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+#clearButton:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
+
+body.dark-mode .darkButton {
+    background-color: gray;
+    color: #000;
+}

@@ -22,42 +22,51 @@ document.getElementById('searchInput').addEventListener('input', function (e) {
     resultsList.innerHTML = '';
 
     if (query.length === 1 && query[0] === '') {
-    return; // No mostrar resultados si la query está vacía
+        return; // No mostrar resultados si la query está vacía
     }
 
-        const results = listado.filter(item => 
-            query.every(term => 
-                (item.Nombre_Radio && item.Nombre_Radio.toLowerCase().includes(term)) ||
-                (item.Frecuencia && item.Frecuencia.toString().toLowerCase().includes(term)) ||
-                (item.Zona_Servicio && item.Zona_Servicio.toLowerCase().includes(term))
-            )
-        );
+    const results = listado.filter(item =>
+        query.every(term =>
+            (item.Nombre_Radio && item.Nombre_Radio.toLowerCase().includes(term)) ||
+            (item.Frecuencia && item.Frecuencia.toString().toLowerCase().includes(term)) ||
+            (item.Zona_Servicio && item.Zona_Servicio.toLowerCase().includes(term))
+        )
+    );
 
-        results.forEach(item => { // Crear un elemento <li> para cada resultado
-            const li = document.createElement('li');
-            const div = document.createElement('div');
-            const nombreRadioStrong = document.createElement('strong');
-            
-            const seleccionar = document.createElement('input');
-            seleccionar.type = 'checkbox';
-            seleccionar.classList.add('checkbox');
-            seleccionar.id = item.Señal.replace(/\s+/g, '_');
+    results.forEach(item => { // Crear un elemento <li> para cada resultado
+        const li = document.createElement('li');
+        const div = document.createElement('div');
+        const nombreRadioStrong = document.createElement('strong');
 
-            nombreRadioStrong.textContent = item.Nombre_Radio;
-            const spanRadioInfo = document.createElement('span');
-            spanRadioInfo.textContent = `🌍 ${item.Zona_Servicio} | 📶 ${item.Frecuencia} ${item.Tipo === 'AM' ? 'kHz' :  'MHz'} | ${item.Tipo === 'AM' ? '🟠' : item.Tipo === 'FM' ? '🔵' : '🟢'} ${item.Tipo}`;
-            div.appendChild(nombreRadioStrong);
-            div.appendChild(spanRadioInfo);
-            li.appendChild(seleccionar);
-            li.appendChild(div);
+        const seleccionar = document.createElement('input');
+        seleccionar.type = 'checkbox';
+        seleccionar.classList.add('checkbox');
+        seleccionar.id = item.Señal.replace(/\s+/g, '_');
 
-            li.classList.toggle(`${item.Tipo}`);
-            div.addEventListener('click', () => showModal(item));
-            resultsList.appendChild(li);
-        });
+        nombreRadioStrong.textContent = item.Nombre_Radio;
+        const spanRadioInfo = document.createElement('span');
+        spanRadioInfo.textContent = `🌍 ${item.Zona_Servicio} | 📶 ${item.Frecuencia} ${item.Tipo === 'AM' ? 'kHz' : 'MHz'} | ${item.Tipo === 'AM' ? '🟠' : item.Tipo === 'FM' ? '🔵' : '🟢'} ${item.Tipo}`;
+        div.appendChild(nombreRadioStrong);
+        div.appendChild(spanRadioInfo);
+        li.appendChild(seleccionar);
+        li.appendChild(div);
+
+        li.classList.toggle(`${item.Tipo}`);
+        div.addEventListener('click', () => showModal(item));
+        resultsList.appendChild(li);
+    });
 });
-
-document.getElementById('darkModeButton').addEventListener('click', function() {
+document.getElementById('showButtons').addEventListener('click', function () {
+    document.getElementsByClassName('conBotones')[0].style.display = 'flex';
+    document.getElementsByClassName('sinBotones')[0].style.display = 'none';
+}
+);
+document.getElementById('hideButtons').addEventListener('click', function () {
+    document.getElementsByClassName('conBotones')[0].style.display = 'none';
+    document.getElementsByClassName('sinBotones')[0].style.display = 'flex';
+}
+);
+document.getElementById('darkModeButton').addEventListener('click', function () {
     const body = document.body;
     const isDarkMode = body.classList.toggle('dark-mode');
     this.textContent = isDarkMode ? '🌞' : '🌙';
@@ -95,26 +104,26 @@ document.getElementById('clearButton').addEventListener('click', () => {
 );
 function showModal(item) {
     const caracteristicas = [
-        {nombre: '📡 Señal', valor: item.Señal},
-        {nombre: '🎙️ Tipo', valor: item.Tipo},
-        {nombre: '📋 Código Región', valor: item.Cod_Reg},
-        {nombre: '🌎 Región', valor: item.Región},
-        {nombre: '📍 Zona de Servicio', valor: item.Zona_Servicio},
-        {nombre: '📻 Frecuencia', valor: `${item.Frecuencia} ${item.Tipo === 'AM' ? 'kHz' :  'MHz'}`},
-        {nombre: '⚡ Potencia', valor: `${item.Potencia} W`},
-        {nombre: '🏷️ Nombre de la Radio', valor: item.Nombre_Radio},
-        {nombre: '🏢 Concesionaria', valor: item.Concesionaria},
-        {nombre: '🆔 RUT', valor: item.RUT},
-        {nombre: '📜 Tipo de Concesión', valor: item.Tipo_Concesión},
-        {nombre: '📅 Fecha', valor: item.Fecha},
-        {nombre: '🏠 Dirección del Estudio', valor: item.Dirección_Estudio},
-        {nombre: '🏘️ Comuna del Estudio', valor: item.Comuna_Estudio},
-        {nombre: '🌐 Región del Estudio', valor: item.Región_Estudio},
-        {nombre: '📡 Dirección de la Antena', valor: item.Dirección_Planta},
-        {nombre: '🏙️ Comuna de la Antena', valor: item.Comuna_Planta},
-        {nombre: '🗺️ Región de la Antena', valor: item.Región_Planta},
-        {nombre: '📍 Latitud antena', valor: item.Latitud},
-        {nombre: '📍 Longitud antena', valor: item.Longitud}
+        { nombre: '📡 Señal', valor: item.Señal },
+        { nombre: '🎙️ Tipo', valor: item.Tipo },
+        { nombre: '📋 Código Región', valor: item.Cod_Reg },
+        { nombre: '🌎 Región', valor: item.Región },
+        { nombre: '📍 Zona de Servicio', valor: item.Zona_Servicio },
+        { nombre: '📻 Frecuencia', valor: `${item.Frecuencia} ${item.Tipo === 'AM' ? 'kHz' : 'MHz'}` },
+        { nombre: '⚡ Potencia', valor: `${item.Potencia} W` },
+        { nombre: '🏷️ Nombre de la Radio', valor: item.Nombre_Radio },
+        { nombre: '🏢 Concesionaria', valor: item.Concesionaria },
+        { nombre: '🆔 RUT', valor: item.RUT },
+        { nombre: '📜 Tipo de Concesión', valor: item.Tipo_Concesión },
+        { nombre: '📅 Fecha', valor: item.Fecha },
+        { nombre: '🏠 Dirección del Estudio', valor: item.Dirección_Estudio },
+        { nombre: '🏘️ Comuna del Estudio', valor: item.Comuna_Estudio },
+        { nombre: '🌐 Región del Estudio', valor: item.Región_Estudio },
+        { nombre: '📡 Dirección de la Antena', valor: item.Dirección_Planta },
+        { nombre: '🏙️ Comuna de la Antena', valor: item.Comuna_Planta },
+        { nombre: '🗺️ Región de la Antena', valor: item.Región_Planta },
+        { nombre: '📍 Latitud antena', valor: item.Latitud },
+        { nombre: '📍 Longitud antena', valor: item.Longitud }
     ]
     document.getElementById('modalTitle').textContent = item.Nombre_Radio;
     caracteristicas.forEach(caracteristica => {
@@ -145,7 +154,7 @@ function showModal(item) {
             document.getElementById('map').innerHTML = '<p>Ubicación no disponible</p>';
         }
     }, 100); // pequeño retardo para dar tiempo a que el modal se muestre
-        
+
 }
 
 
@@ -154,7 +163,7 @@ document.getElementById('overlay').addEventListener('click', closeModal);
 
 function closeModal() {
     const modal = document.getElementById('modal');
-    modal.scrollTo(0,0);
+    modal.scrollTo(0, 0);
     modalContent.innerHTML = '';
     modal.style.display = 'none';
     document.getElementById('overlay').style.display = 'none';

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XN3V9WDYMK"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'G-XN3V9WDYMK');
@@ -15,19 +16,21 @@
     <title>Base de datos de RADIOS FM/AM de Chile</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""/>
-    
-    <link rel="stylesheet" href="style.css">
-     <!-- Make sure you put this AFTER Leaflet's CSS -->
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""></script>
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <link rel="icon" href="img/icons8-radio-48.png" type="image/x-icon">
-
+    <link rel="stylesheet" href="css/body.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/results.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/modal.css">
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Radios FM/AM de Chile – Consulta por Frecuencia y Zona" />
-    <meta property="og:description" content="Explora fácilmente qué radio se transmite en cada frecuencia según zona y tipo. Proyecto interactivo con datos abiertos de SUBTEL." />
+    <meta property="og:description"
+        content="Explora fácilmente qué radio se transmite en cada frecuencia según zona y tipo. Proyecto interactivo con datos abiertos de SUBTEL." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://radios.palminio.cl" />
     <meta property="og:image" content="https://radios.palminio.cl/img/og-image.png" />
@@ -37,16 +40,19 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Radios FM/AM de Chile – Consulta por Frecuencia y Zona" />
-    <meta name="twitter:description" content="Explora qué radios se transmiten por frecuencia y zona. Herramienta basada en datos abiertos de SUBTEL." />
+    <meta name="twitter:description"
+        content="Explora qué radios se transmiten por frecuencia y zona. Herramienta basada en datos abiertos de SUBTEL." />
     <meta name="twitter:image" content="https://radios.palminio.cl/img/og-image.png" />
 
 </head>
+
 <body>
-    
+
     <header>
         <div id="searchContainer">
             <div id="titleContainer" class="header">
-                <h1><img src="img/icons8-radio-48.png" alt="Radio" style="vertical-align: middle; margin-right: 8px;">Radios FM/AM de Chile</h1>
+                <h1><img src="img/icons8-radio-48.png" alt="Radio"
+                        style="vertical-align: middle; margin-right: 8px;">Radios FM/AM de Chile</h1>
                 <p>Consulta interactiva de concesiones por zona, frecuencia y tipo</p>
             </div>
             <div class="search-wrapper">
@@ -55,15 +61,21 @@
         </div>
 
     </header>
-    
-    
+
+
     <ul id="results"></ul>
     <div class="flotanteContainer">
-        <button id="darkModeButton" class="darkButton">🌙</button>
-        <button id="downloadButton">📥</button>
-        <button id="clearButton">🗑️</button>
+        <div class="sinBotones">
+            <button id="showButtons">🪄</button>
+        </div>
+        <div class="conBotones">
+            <button id="hideButtons">🎩</button>
+            <button id="darkModeButton" class="darkButton">🌙</button>
+            <button id="downloadButton">📥</button>
+            <button id="clearButton">🗑️</button>
+        </div>
     </div>
-    
+
     <!-- Modal -->
     <div id="overlay"></div>
     <div id="modal">
@@ -72,12 +84,17 @@
         <button id="modalClose">Cerrar</button>
     </div>
     <script src="./main.js" type="module"></script>
-    <footer >
-        <p>Hecho con ❤️ en Chile · Fuente: <a style="color: #007bff" href="https://www.subtel.gob.cl/inicio-concesionario/servicios-de-telecomunicaciones/servicios-de-radiodifusion-sonora/">SUBTEL</a> · Última actualización: Marzo 2025</p>
-        <p>📂 Código fuente disponible en <a href="https://github.com/palminiocl/radios.palminio.cl" target="_blank">GitHub</a></p>
-        <p><a target="_blank" href="https://icons8.com/icon/12793/radio">Radio</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a></p>
-        <p><a href="#" >Ir al inicio</a></p>
+    <footer>
+        <p>Hecho con ❤️ en Chile · Fuente: <a style="color: #007bff"
+                href="https://www.subtel.gob.cl/inicio-concesionario/servicios-de-telecomunicaciones/servicios-de-radiodifusion-sonora/">SUBTEL</a>
+            · Última actualización: Marzo 2025</p>
+        <p>📂 Código fuente disponible en <a href="https://github.com/palminiocl/radios.palminio.cl"
+                target="_blank">GitHub</a></p>
+        <p><a target="_blank" href="https://icons8.com/icon/12793/radio">Radio</a> icon by <a target="_blank"
+                href="https://icons8.com">Icons8</a></p>
+        <p><a href="#">Ir al inicio</a></p>
     </footer>
-    
+
 </body>
+
 </html>
