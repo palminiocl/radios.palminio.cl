@@ -71,11 +71,7 @@ The site is automatically deployed via [GitHub Pages](https://pages.github.com/)
 
 ### 📄 License
 
-This project is currently **not licensed** for public use beyond viewing and personal exploration.
-
-> ⚠️ **License Pending:**
-> The licensing terms for this project are still under review. Until a formal license is defined, **any redistribution, modification, or commercial use is not permitted**. Please contact the author if you wish to reuse or collaborate.
-
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 
 
