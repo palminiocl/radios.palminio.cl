@@ -58,9 +58,7 @@
     background-color: #7303a0;
     transform: scale(1.05);
 }
-
-.darkButton {
-    background-color: #000;
+div.flotanteContainer button {
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -71,44 +69,39 @@
     height: 100%;
     margin-top: 10px;
 }
+div.flotanteContainer button:hover {
+    transform: scale(1.05);
+}
+#sugerenciaButton {
+    background-color: #aaa8a8;
+}
+#sugerenciaButton:hover {
+    background-color: #888686;
+}
+.darkButton {
+    background-color: #000;
+    
+}
 
 .darkButton:hover {
     background-color: #444;
-    transform: scale(1.05);
 }
 
 #downloadButton {
     background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    margin-top: 10px;
+
 }
 
 #downloadButton:hover {
     background-color: #0056b3;
-    transform: scale(1.05);
 }
 
 #clearButton {
     background-color: #dc3545;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    margin-top: 10px;
 }
 
 #clearButton:hover {
     background-color: #c82333;
-    transform: scale(1.05);
 }
 
 body.dark-mode .darkButton {

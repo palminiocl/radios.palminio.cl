@@ -103,6 +103,13 @@ document.getElementById('clearButton').addEventListener('click', () => {
     });
 }
 );
+document.getElementById('sugerenciaButton').addEventListener('click', () => {
+    const url = "https://forms.gle/7dGurm1aMaSnqeT56"
+    if (url) {
+        window.open(url, '_blank');
+    }
+}
+);
 function showModal(item) {
     const caracteristicas = [
         { nombre: '📡 Señal', valor: item.Señal },
