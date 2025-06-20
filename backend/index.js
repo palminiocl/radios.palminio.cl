@@ -17,6 +17,16 @@ app.get('/radios', (req,res) => {
     res.json(radios);
 })
 
+// Busqueda por nombre
+app.get('/radios/search', (req,res) =>{
+    const query = req.query.q?.toLowerCase();
+    if(!query) return res.json(radios);
+
+    const result = radios.filter( r => 
+        r["Nombre_Radio"]?.toLowerCase().includes(query)
+    );
+    res.json(result);
+})
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
