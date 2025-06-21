@@ -1,8 +1,15 @@
-const XLSX = require("xlsx");
-const fs = require("fs");
-const axios = require("axios");
-const path = require("path");
-const cheerio = require("cheerio");
+import XLSX from "xlsx";
+import fs from "fs";
+import axios from "axios";
+import path from "path";
+import * as cheerio from "cheerio";
+import { fileURLToPath } from "url";
+
+// Polyfill for __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// ETL Script to download, process and convert an Excel file from a URL into a JSON format
 
 let filePath = "";
 
