@@ -17,16 +17,21 @@ app.get('/radios', (req,res) => {
     res.json(radios);
 })
 
-// Busqueda por nombre
+// Busqueda por nombre, frecuencia y/o zona de servicio
 app.get('/radios/search', (req,res) =>{
-    const query = req.query.q?.toLowerCase();
+    const query = req.query.q?.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').split(' ');
+    const results = radios.filter(item =>
+        query.every(term =>
+            (item.Nombre_Radio && item.Nombre_Radio.toLowerCase().includes(term)) ||
+            (item.Frecuencia && item.Frecuencia.toString().toLowerCase().includes(term)) ||
+            (item.Zona_Servicio && item.Zona_Servicio.toLowerCase().includes(term))
+        )
+    );
     if(!query) return res.json(radios);
 
-    const result = radios.filter( r => 
-        r["Nombre_Radio"]?.toLowerCase().includes(query)
-    );
-    res.json(result);
+    res.json(results);
 })
+
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
