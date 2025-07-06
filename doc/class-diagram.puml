@@ -1,0 +1,63 @@
+@startuml
+package "Modelo" {
+    together {
+        interface Ubicable {
+            + getUbicacion(): Ubicacion
+        }
+
+        class Ubicacion {
+            - String direccion
+            - String comuna
+            - String region
+        }
+
+        abstract class Infraestructura implements Ubicable {
+            - Ubicacion ubicacion
+        }
+    }
+
+    class Antena extends Infraestructura {
+        - String codigoSeñal
+        - String frecuencia
+        - int potencia
+        - Fecha fechaInstalacion
+        - double latitud
+        - double longitud
+        - String datum
+        - String zonaServicio
+        - TipoSeñal tipo
+        - UnidadFrecuencia unidad
+    }
+
+    class Radio extends Infraestructura {
+        - String nombre
+    }
+
+    class Concesionario {
+        - String nombre
+        - String RUT
+    }
+
+    enum TipoSeñal {
+        AM,
+        FM,
+        RC,
+        MC,
+        OC
+    }
+
+    enum UnidadFrecuencia {
+        KHz,
+        MHz
+    }
+    
+    Concesionario "1" *-left- "1..*" Radio : posee
+    Radio "1" o-left- "1..*" Antena : tiene
+    Antena "1" x--> "1" TipoSeñal : transmite
+    Antena "1" x--> "1" UnidadFrecuencia : opera en
+    Infraestructura "1" x-right-> "1" Ubicacion : tiene
+
+
+
+}
+@enduml
