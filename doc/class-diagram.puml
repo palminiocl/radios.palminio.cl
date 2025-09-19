@@ -36,6 +36,7 @@ package "Modelo" {
     class Concesionario {
         - String nombre
         - String RUT
+        - Radio[] radios
     }
 
     enum TipoSeñal {
