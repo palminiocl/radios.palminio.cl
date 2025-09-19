@@ -13,3 +13,62 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model GeographicLocation {
+  id        Int    @id @default(autoincrement())
+  region    String
+  comuna    String
+  latitude  Float?
+  longitude Float?
+  datum String?
+
+  antenas   Antena[]
+  studioRadios Radio[]
+}
+
+model Antena {
+  id Int @id @default(autoincrement())
+  signalCode  String  @unique
+  frequency   Float
+  frequencyUnit FrequencyUnit
+  signalType  SignalType
+  power Int
+  serviceZone String
+  installationDate DateTime
+  geographicLocationId Int
+  studioId Int
+
+  studio Radio @relation(fields: [studioId], references: [id])
+  geographicLocation   GeographicLocation @relation(fields: [geographicLocationId], references: [id])
+
+}
+model Radio {
+  id Int  @id @default(autoincrement())
+  name String
+  studioLocationId Int
+  geographicLocationId Int
+  concesionarioId Int
+  antenas Antena[]
+
+  concesionario Concesionario @relation(fields: [concesionarioId], references: [id])
+  geographicLocation   GeographicLocation @relation(fields: [geographicLocationId], references: [id])
+}
+model Concesionario {
+  id   Int    @id @default(autoincrement())
+  name String
+  rut  String @unique
+  radios Radio[]
+}
+
+enum SignalType {
+  AM
+  FM
+  RC
+  MC
+  OC
+}
+
+enum FrequencyUnit {
+  kHz
+  MHz
+}

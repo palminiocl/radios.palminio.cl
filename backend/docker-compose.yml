@@ -1,0 +1,27 @@
+# Use postgres/example user/password credentials
+
+name: backend radios.palminio.cl
+services:
+  db:
+    container_name: postgres_db
+    image: postgres:16
+    restart: always
+    ports:
+      - 5432:5432
+      
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: db_radios
+      POSTGRES_LOG_STATEMENT: all
+      POSTGRES_LOG_DIRECTORY: /var/log/postgresql
+      POSTGRES_LOG_FILENAME: postgres.log
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
