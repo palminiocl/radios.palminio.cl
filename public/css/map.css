@@ -1,0 +1,114 @@
+/* Estilos para los botones de toggle de vista */
+.view-toggle {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: center;
+}
+
+.view-btn {
+    padding: 10px 20px;
+    border: 2px solid #007bff;
+    background-color: white;
+    color: #007bff;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.view-btn:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.view-btn.active {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Modo oscuro para los botones */
+body.dark-mode .view-btn {
+    border-color: #66b3ff;
+    background-color: #1a1a1a;
+    color: #66b3ff;
+}
+
+body.dark-mode .view-btn:hover {
+    background-color: #66b3ff;
+    color: #1a1a1a;
+}
+
+body.dark-mode .view-btn.active {
+    background-color: #66b3ff;
+    color: #1a1a1a;
+}
+
+/* Contenedor principal de vistas */
+#viewContainer {
+    width: 100%;
+    height: 100%;
+}
+
+/* Contenedor del mapa principal */
+#mapContainer {
+    width: 100%;
+    height: calc(100vh - 200px);
+    min-height: 500px;
+    margin: 20px auto;
+    max-width: 1200px;
+}
+
+#mainMap {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Personalización de popups de Leaflet */
+.leaflet-popup-content-wrapper {
+    border-radius: 8px;
+}
+
+.leaflet-popup-content {
+    margin: 10px;
+}
+
+.leaflet-popup-content strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+/* Iconos de marcadores personalizados */
+.radio-marker-fm {
+    background-color: #007bff;
+}
+
+.radio-marker-am {
+    background-color: #ff8c00;
+}
+
+.radio-marker-dab {
+    background-color: #28a745;
+}
+
+/* Ajustes responsive */
+@media (max-width: 768px) {
+    #mapContainer {
+        height: calc(100vh - 250px);
+        min-height: 400px;
+    }
+    
+    .view-toggle {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .view-btn {
+        width: 100%;
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}

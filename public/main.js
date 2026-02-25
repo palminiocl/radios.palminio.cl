@@ -8,6 +8,119 @@ const listado = await fetch('./listado_clean.json').then((response) => {
     return [];
 }); // Se carga el listado de radios desde el archivo JSON una vez al inicio
 
+// Variables globales para el mapa
+let mainMap = null;
+let markersLayer = null;
+let currentView = 'list'; // 'list' o 'map'
+
+// Función para inicializar el mapa principal
+function initMainMap() {
+    if (!mainMap) {
+        mainMap = L.map('mainMap').setView([-33.4489, -70.6693], 5); // Centrado en Chile
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap'
+        }).addTo(mainMap);
+        
+        markersLayer = L.layerGroup().addTo(mainMap);
+    }
+}
+
+// Función para actualizar el mapa con los resultados
+function updateMap(results) {
+    if (!mainMap) {
+        initMainMap();
+    }
+    
+    // Limpiar marcadores anteriores
+    markersLayer.clearLayers();
+    
+    // Añadir marcadores para cada radio con coordenadas
+    const validResults = results.filter(item => item.Latitud != null && item.Longitud != null);
+    
+    validResults.forEach(item => {
+        const marker = L.marker([item.Latitud, item.Longitud]);
+        
+        // Personalizar icono según el tipo
+        const iconColor = item.Tipo === 'AM' ? '🟠' : item.Tipo === 'FM' ? '🔵' : '🟢';
+        
+        const popupContent = `
+            <strong>${item.Nombre_Radio}</strong><br>
+            <b>Frecuencia:</b> ${item.Frecuencia} ${item.Tipo === 'AM' ? 'kHz' : 'MHz'}<br>
+            <b>Tipo:</b> ${iconColor} ${item.Tipo}<br>
+            <b>Zona:</b> ${item.Zona_Servicio}
+        `;
+        
+        marker.bindPopup(popupContent);
+        marker.on('click', () => showModal(item));
+        markersLayer.addLayer(marker);
+    });
+    
+    // Ajustar vista del mapa si hay marcadores
+    if (validResults.length > 0) {
+        const bounds = L.latLngBounds(validResults.map(item => [item.Latitud, item.Longitud]));
+        mainMap.fitBounds(bounds, { padding: [50, 50] });
+    }
+    
+    // Forzar re-render del mapa
+    setTimeout(() => {
+        if (mainMap) {
+            mainMap.invalidateSize();
+        }
+    }, 100);
+}
+
+// Función para cambiar entre vistas
+function switchView(view) {
+    currentView = view;
+    
+    const listView = document.getElementById('results');
+    const mapView = document.getElementById('mapContainer');
+    const listBtn = document.getElementById('listViewBtn');
+    const mapBtn = document.getElementById('mapViewBtn');
+    
+    if (view === 'list') {
+        listView.style.display = '';
+        mapView.style.display = 'none';
+        listBtn.classList.add('active');
+        mapBtn.classList.remove('active');
+    } else {
+        listView.style.display = 'none';
+        mapView.style.display = 'block';
+        listBtn.classList.remove('active');
+        mapBtn.classList.add('active');
+        
+        // Inicializar y actualizar el mapa
+        if (!mainMap) {
+            initMainMap();
+        }
+        
+        // Obtener resultados actuales y actualizar mapa
+        const query = document.getElementById('searchInput').value.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').split(' ');
+        
+        if (query.length > 0 && query[0] !== '') {
+            const results = listado.filter(item =>
+                query.every(term =>
+                    (item.Nombre_Radio && item.Nombre_Radio.toLowerCase().includes(term)) ||
+                    (item.Frecuencia && item.Frecuencia.toString().toLowerCase().includes(term)) ||
+                    (item.Zona_Servicio && item.Zona_Servicio.toLowerCase().includes(term))
+                )
+            );
+            updateMap(results);
+        } else {
+            updateMap(listado);
+        }
+        
+        setTimeout(() => {
+            mainMap.invalidateSize();
+        }, 100);
+    }
+}
+
+// Event listeners para los botones de vista
+document.getElementById('listViewBtn').addEventListener('click', () => switchView('list'));
+document.getElementById('mapViewBtn').addEventListener('click', () => switchView('map'));
+
 document.getElementById('searchInput').addEventListener('input', function (e) {
     if (listado.length === 0) {
         const etiqueta = document.createElement('li');
@@ -56,6 +169,11 @@ document.getElementById('searchInput').addEventListener('input', function (e) {
         div.addEventListener('click', () => showModal(item));
         resultsList.appendChild(li);
     });
+    
+    // Actualizar mapa si está en vista de mapa
+    if (currentView === 'map') {
+        updateMap(results);
+    }
 });
 document.getElementById('showButtons').addEventListener('click', function () {
     document.getElementsByClassName('conBotones')[0].style.display = 'flex';

@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/buttons.css">
     <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/map.css">
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Radios FM/AM de Chile – Consulta por Frecuencia y Zona" />
     <meta property="og:description"
@@ -58,12 +59,20 @@
             <div class="search-wrapper">
                 <input type="text" id="searchInput" placeholder="Buscar...">
             </div>
+            <div class="view-toggle">
+                <button id="listViewBtn" class="view-btn active">📋 Listado</button>
+                <button id="mapViewBtn" class="view-btn">🗺️ Mapa</button>
+            </div>
         </div>
 
     </header>
 
-
-    <ul id="results"></ul>
+    <div id="viewContainer">
+        <ul id="results"></ul>
+        <div id="mapContainer" style="display: none;">
+            <div id="mainMap"></div>
+        </div>
+    </div>
     <div class="flotanteContainer">
         <div class="sinBotones">
             <button id="showButtons">🪄</button>
