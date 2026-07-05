@@ -179,4 +179,3 @@ function closeModal() {
 
 document.getElementById('searchInput').value = 'bio bio';
 document.getElementById('searchInput').dispatchEvent(new Event('input'));
-

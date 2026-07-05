@@ -8,10 +8,21 @@ import { fileURLToPath } from "url";
 // Polyfill for __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "..");
+const generatedDir = path.join(projectRoot, "generated");
 
 // ETL Script to download, process and convert an Excel file from a URL into a JSON format
 
 let filePath = "";
+
+function formatUpdateLabel(date) {
+    const formatted = new Intl.DateTimeFormat("es-CL", {
+        month: "long",
+        year: "numeric",
+    }).format(date);
+
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+}
 
 // Descargar el archivo Excel desde la URL si no existe
 async function downloadExcel() {
@@ -121,10 +132,19 @@ async function downloadExcel() {
         const filteredData = cleanData.filter(row => row.Señal);
 
         // Guardar en un archivo JSON
-        const jsonPath = "public/listado_clean.json";
+        fs.mkdirSync(generatedDir, { recursive: true });
+        const jsonPath = path.join(generatedDir, "listado_clean.json");
         fs.writeFileSync(jsonPath, JSON.stringify(filteredData, null, 4), "utf8");
+        const metadataPath = path.join(generatedDir, "build-metadata.json");
+        const buildMetadata = {
+            lastUpdated: formatUpdateLabel(new Date()),
+            generatedAt: new Date().toISOString(),
+        };
+
+        fs.writeFileSync(metadataPath, JSON.stringify(buildMetadata, null, 4), "utf8");
 
         console.log(`✅ Archivo JSON guardado en: ${jsonPath}`);
+        console.log(`✅ Metadata de build guardada en: ${metadataPath}`);
     } catch (error) {
         console.error("❌ Error al descargar o procesar el archivo:", error.message);
     }

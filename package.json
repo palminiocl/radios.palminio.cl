@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "etl": "node etl/script.js",
-    "clean": "rm etl/*.xlsx public/*.json"
+    "build": "node scripts/build-site.js",
+    "clean": "node scripts/clean.js"
   },
   "author": "Lucas Palminio",
   "license": "ISC",

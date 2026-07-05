@@ -11,6 +11,8 @@ node_modules/
 # Ignore build directories
 dist/
 build/
+public/
+generated/
 
 # Ignore system files
 .DS_Store
